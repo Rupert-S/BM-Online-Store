@@ -1,0 +1,26 @@
+{% extends "header.html" %}
+{% block body %}
+<style>
+    .track-card{
+        padding: 5em;
+        background-color: antiquewhite;
+    }
+</style>
+
+<div class="track-card">
+    Order#: {{order_info[0]}} <br>    
+    Status: {{order_info[1]}} <br>
+    <br>
+    First Name: {{order_info[6]}}<br>
+    Last Name:  {{order_info[7]}} <br>
+    Address Line 1:  {{order_info[9]}} <br>
+    Address Line 2:  {{order_info[8]}} <br>
+    Zip Code:  {{order_info[10]}} <br>
+    City:  {{order_info[11]}} <br>
+    State:  {{order_info[12]}} <br>
+    Country:  {{order_info[13]}} <br>
+    Tel#:  {{order_info[14]}} <br> 
+    
+</div>
+
+{% endblock %}
