@@ -1,3 +1,4 @@
+from crypt import methods
 from pydoc import render_doc
 from urllib import request
 from flask import *
@@ -108,6 +109,18 @@ def trackorders():
             cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
             order_info = cur.fetchone()
     return render_template('trackorders.html', loggedIn = loggedIn, first_name = first_name, order_info = order_info)
+
+@app.route('/cart', methods=['POST','GET'])
+def Cart ():
+    loggedIn, first_name = getLogindetails()
+    if loggedIn == False:
+        return redirect(url_for('loginform'))
+    with sqlite3.connect('database.db') as con:
+        cur = con.cursor()
+        cur.execute("select * from products inner join kart on products.productId = kart.productId where kart.userId = (select userId from users where email = '{}')".format(session['email']))
+        kart_info = cur.fetchone()
+    return render_template('kart.html', loggedIn = loggedIn, first_name = first_name, kart_info = kart_info)
+
 
 
 @app.route('/logout')
@@ -246,18 +259,10 @@ def product():
                 productId = conn.fetchone()
                 conn.execute("insert into kart values('{}','{}','{}')".format(userId[0],productId[0],quantity))
                 c.commit()
-                conn.execute("select * from kart")
-                a = conn.fetchall()
-                print(a)
-            return redirect(url_for('root'))
+            return redirect(url_for('Cart'))
                      
 
-@app.route('/cart')
-def Cart ():
-    with sqlite3.connect('database.db') as conn:
-        c = conn.cursor()
-        conn.execute("select name from products")
-    return render_template('kart.html')
+
 
 
 @app.route('/shop_by_category')
