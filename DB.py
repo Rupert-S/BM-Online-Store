@@ -69,7 +69,7 @@ try:
 		orderId int(11) NOT NULL,
 		quantity integer,
 		price REAL,
-		FOREIGN KEY (price) REFERENCES products(price)
+		FOREIGN KEY (price) REFERENCES products(price),
 		FOREIGN KEY(userId) REFERENCES users(userId),
 		FOREIGN KEY(productId) REFERENCES products(productId)
 		)''')
