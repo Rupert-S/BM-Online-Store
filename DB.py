@@ -37,9 +37,9 @@ except:
     pass
 try:
     conn.execute('''CREATE TABLE kart
-		(userId Integer primary key,
+		(userId Integer,
 		productId INTEGER,
-                quantity integer,
+        quantity integer,
 		FOREIGN KEY(userId) REFERENCES users(userId),
 		FOREIGN KEY(productId) REFERENCES products(productId)
 		)''')
