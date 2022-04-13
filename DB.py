@@ -84,10 +84,3 @@ try:
 	)''')
 except:
 	pass
-try:
-	cur = conn.cursor()
-	cur.execute('''INSERT INTO orders (orderId, status, userId) VALUES (1, 'Delivered', 1)''')
-	conn.commit()
-	print('success')
-except:
-	pass

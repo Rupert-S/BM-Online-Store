@@ -2,39 +2,45 @@
 {% block body %}
 
 <div class="track-card">
-    <form method="post">
-    <label for="orderId">Order#:{{order_info[0]}} </label> <br>
-    <input type="text" name="orderId" value="{{order_info[0]}}" hidden>   
-    <label for="status">Status:</label>
-    <select id="status" name="status">
-        <option value="Delivered">Delivered</option>
-        <option value="Processing"selected>Processing</option>
-        <option value="Out for Delivery">Out for Delivery</option>
-        <option value="Ready for Pick-up">Ready for Pick-up</option>
-    </select> <br>
-    First Name: {{order_info[6]}}<br>
-    Last Name:  {{order_info[7]}} <br>
-    Address Line 1:  {{order_info[9]}} <br>
-    Address Line 2:  {{order_info[8]}} <br>
-    Zip Code:  {{order_info[10]}} <br>
-    City:  {{order_info[11]}} <br>
-    State:  {{order_info[12]}} <br>
-    Country:  {{order_info[13]}} <br>
-    Tel#:  {{order_info[14]}} <br> 
-    <button type="submit"> Update Status</button>
+    {%for orders in all_orders%}
+    {%if sess =='admin@bmonline.com'%}
+    <form method="post">  
+        <label for="orderId">Order#:{{orders[0]}} </label> <br>
+        <input type="text" name="orderId" value="{{orders[0]}}" hidden>   
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="Delivered">Delivered</option>
+            <option value="Processing"selected>Processing</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Ready for Pick-up">Ready for Pick-up</option>
+        </select> <br>
+        First Name: {{orders[6]}}<br>
+        Last Name:  {{orders[7]}} <br>
+        Address Line 1:  {{orders[9]}} <br>
+        Address Line 2:  {{orders[8]}} <br>
+        Zip Code:  {{orders[10]}} <br>
+        City:  {{orders[11]}} <br>
+        State:  {{orders[12]}} <br>
+        Country:  {{orders[13]}} <br>
+        Tel#:  {{orders[14]}} <br> 
+        <button type="submit"> Update Status</button>
     </form>
+    {%endif%}
+    {%endfor%}
+    {%for orders in order_info%}
     <br>
-    Order#:{{order_info[0]}} <br> 
-    Status: {{order_info[1]}} <br>
-    First Name: {{order_info[6]}}<br>
-    Last Name:  {{order_info[7]}} <br>
-    Address Line 1:  {{order_info[9]}} <br>
-    Address Line 2:  {{order_info[8]}} <br>
-    Zip Code:  {{order_info[10]}} <br>
-    City:  {{order_info[11]}} <br>
-    State:  {{order_info[12]}} <br>
-    Country:  {{order_info[13]}} <br>
-    Tel#:  {{order_info[14]}} <br> 
+    Order#:{{orders[0]}} <br> 
+    Status: {{orders[1]}} <br>
+    First Name: {{orders[6]}}<br>
+    Last Name:  {{orders[7]}} <br>
+    Address Line 1:  {{orders[9]}} <br>
+    Address Line 2:  {{orders[8]}} <br>
+    Zip Code:  {{orders[10]}} <br>
+    City:  {{orders[11]}} <br>
+    State:  {{orders[12]}} <br>
+    Country:  {{orders[13]}} <br>
+    Tel#:  {{orders[14]}} <br> 
+    {%endfor%}
 </div>
 
 {% endblock %}

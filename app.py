@@ -1,6 +1,7 @@
 from crypt import methods
 from pydoc import render_doc
 from urllib import request
+from webbrowser import get
 from flask import *
 import sqlite3, hashlib, os
 from werkzeug.utils import secure_filename
@@ -275,15 +276,23 @@ def trackorders():
     if loggedIn == False:
         return redirect(url_for('loginform'))
     with sqlite3.connect('database.db') as con:
-        cur = con.cursor()
-        cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
-        order_info = cur.fetchone()
+        if request.method=='GET':    
+            cur = con.cursor()
+            cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
+            order_info = cur.fetchall()
+            cur.execute("select * from  orders inner join users on orders.userId = users.userId")
+            all_orders = cur.fetchall()
         if request.method=='POST':
+            cur = con.cursor()
+            cur.execute("select * from  orders inner join users on orders.userId = users.userId")
+            all_orders = cur.fetchall()
             status = request.form['status']
-            orderId = request.form['orderId']
+            orderId = request.form['orderId'] 
+            cur = con.cursor()   
             cur.execute("update orders set status='{}' where orderId = '{}'".format(status,orderId))
             con.commit()
-    return render_template('trackorders.html', loggedIn = loggedIn, first_name = first_name, order_info = order_info)
+            return render_template('trackorders.html', loggedIn = loggedIn, first_name = first_name, all_orders = all_orders, sess = session['email'])
+    return render_template('trackorders.html', loggedIn = loggedIn, first_name = first_name, order_info = order_info, all_orders = all_orders, sess = session['email'])
 
 #Leave Feedback on service                     
 @app.route('/feedback', methods=['POST','GET'])
