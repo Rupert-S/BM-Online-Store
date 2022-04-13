@@ -268,32 +268,22 @@ def viewinvoice():
         user_info = cur.fetchone()
     return render_template('invoice.html',loggedIn= loggedIn, first_name=first_name, user_info=user_info)
 
-#Track order status
+#Track and update order status
 @app.route('/trackorders', methods=['POST','GET'])
 def trackorders():   
     loggedIn, first_name = getLogindetails()
     if loggedIn == False:
         return redirect(url_for('loginform'))
     with sqlite3.connect('database.db') as con:
-        if request.method== 'GET':
-            cur = con.cursor()
-            cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
-            order_info = cur.fetchone()
+        cur = con.cursor()
+        cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
+        order_info = cur.fetchone()
+        if request.method=='POST':
+            status = request.form['status']
+            orderId = request.form['orderId']
+            cur.execute("update orders set status='{}' where orderId = '{}'".format(status,orderId))
+            con.commit()
     return render_template('trackorders.html', loggedIn = loggedIn, first_name = first_name, order_info = order_info)
-
-#Update order status
-@app.route('/updatestatus', methods=['POST', 'GET'])
-def updatestatus():
-    loggedIn, first_name = getLogindetails()
-    if loggedIn == False:
-        return redirect(url_for('loginform'))
-    with sqlite3.connect('database.db') as con:
-        if request.method== 'GET':
-            cur = con.cursor()
-            cur.execute("select * from  orders inner join users on orders.userId = users.userId where email = '{}'".format(session['email']))
-            order_info = cur.fetchone()
-    return render_template('updatestatus.html', loggedIn = loggedIn, first_name = first_name, order_info = order_info)
-
 
 #Leave Feedback on service                     
 @app.route('/feedback', methods=['POST','GET'])
